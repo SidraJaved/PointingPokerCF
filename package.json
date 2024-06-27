@@ -4,6 +4,10 @@
   "description": "Pointing Poker for Blaise 5 team",
   "main": "index.js",
   "author": "SJ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SidraJaved/PointingPokerCF.git"
+  },
   "license": "MIT",
   "private": false,
   "dependencies": {
