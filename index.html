@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Blaise5-Pointing-Poker</title>
+    <style>
+        body {
+            margin: 0;
+            padding-bottom: 3rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            text-align: center;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create three equal columns that floats next to each other */
+        .column {
+            float: left;
+            /* Should be removed. Only for demonstration */
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        #chatMessageForm {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 5em;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            width: 70%;
+
+        }
+
+        .UserJoinedClass {
+            background-color: rgb(68, 183, 145) !important;
+            width: 50%;
+            /* margin: 2px; */
+            color: #fff;
+            margin: 2px auto;
+        }
+
+        #message {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #message:focus {
+            outline: none;
+        }
+
+        #MessageButton {
+            width: 50px;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        #leaveRoomButton {
+            background-color: coral;
+            color: #fff;
+            border-radius: 5px;
+            border-color: coral;
+        }
+
+        #chatMessageForm>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        #ButtonsGrid {
+            background-color: rgb(10, 170, 117);
+            padding: 5px;
+            margin: 5px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #messagesList {
+            list-style-type: none;
+            margin: 5px;
+            padding: 5px;
+            margin: 0 auto;
+        }
+
+        #messagesList>li {
+            padding: 0.5rem 1rem;
+        }
+
+        #messagesList>li:nth-child(odd) {
+            background: #efefef;
+        }
+
+        #averageDiv {
+            background-color: rgb(205, 202, 198);
+            padding: 5px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        #usersDiv {
+            background-color: rgb(205, 202, 198);
+            padding: 5px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .Pointer {
+            width: 50%;
+            height: 30px;
+            background-color: rgb(161, 167, 165);
+            border-radius: 2px;
+            margin: 2px auto;
+        }
+
+        li {
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body onload="preReq()">
+
+    <div id="welcomeBanner" class="jumbotron text-center">
+        <h1>Blaise 5 Pointing Poker</h1>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center" style="padding: 10px;" id="buttonsGrid">
+            <div class="col-md-4" style=" border-width: 10px; border-radius: 2px; border-color: #333;">
+                <div class="row">
+                    <button class="btn btn-info" id="MessageButton" value="0"
+                        onclick="sendPoints(this.value)">0</button>
+                    <button class="btn btn-info" id="MessageButton" value="1/2"
+                        onclick="sendPoints(this.value)">1/2</button>
+                    <button class="btn btn-info" id="MessageButton" value="1"
+                        onclick="sendPoints(this.value)">1</button>
+                    <button class="btn btn-info" id="MessageButton" value="2"
+                        onclick="sendPoints(this.value)">2</button>
+
+                </div>
+                <div class="row">
+                    <button class="btn btn-info" id="MessageButton" value="3"
+                        onclick="sendPoints(this.value)">3</button>
+                    <button class="btn btn-info" id="MessageButton" value="5"
+                        onclick="sendPoints(this.value)">5</button>
+                    <button class="btn btn-info" id="MessageButton" value="8"
+                        onclick="sendPoints(this.value)">8</button>
+                    <button class="btn btn-info" id="MessageButton" value="13"
+                        onclick="sendPoints(this.value)">13</button>
+                </div>
+                <div class="row">
+                    <button class="btn btn-info" id="MessageButton" value="21"
+                        onclick="sendPoints(this.value)">21</button>
+                    <button class="btn btn-info" id="MessageButton" value="34"
+                        onclick="sendPoints(this.value)">34</button>
+                    <button class="btn btn-info" id="MessageButton" value="55"
+                        onclick="sendPoints(this.value)">55</button>
+                    <button class="btn btn-info" id="MessageButton" value="89"
+                        onclick="sendPoints(this.value)">89</button>
+                </div>
+                <div class="resetButtons">
+                    <button class="btn btn-danger" id="ResetButton" onclick="resetPoints()">Reset</button>
+                </div>
+            </div>
+            <div class="col-md-4" style=" border-width: 2px; border-radius: 2px;">
+                <div id="averageDiv">
+                    <p>Average Points</p>
+                    <div>
+                        <p id="newAvg"></p>
+                    </div>
+                </div>
+
+                <div id="usersDiv">
+                    <p>People Pointing</p>
+                    <div id="pointsTable" class="justify-content-center">
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4" style=" border-width: 2px; border-radius: 2px;" id="chat">
+                <ul id="messagesList"></ul>
+                <!-- <form id="chatMessageForm" action="">
+                    <input id="message" autocomplete="off" placeholder="Do you want to chat too :P" /><button
+                        id="MessageButton">Send</button>
+                </form> -->
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="join">
+        <form id="joinRoomForm" action="">
+            <input id="username" autocomplete="off" autofocus /><button>Join</button>
+        </form>
+    </div>
+
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const socket = io({
+            auth: {
+                serverOffset: 0
+            }
+        });
+
+
+        const joinForm = document.getElementById('joinRoomForm');
+        const username = document.getElementById('username');
+
+
+
+
+        const chatMessageForm = document.getElementById('chatMessageForm');
+
+        const input = document.getElementById('message');
+
+        const messagesList = document.getElementById('messagesList');
+
+        const joinDiv = document.getElementById('join');
+        const chatDiv = document.getElementById('chat');
+        const buttonsGridDiv = document.getElementById('buttonsGrid');
+
+        let userNameValue = "";
+
+
+        function preReq() {
+            chatDiv.style.display = 'none';
+            buttonsGridDiv.style.display = 'none';
+        }
+
+        function sendPoints(value) {
+            socket.emit('chat message', userNameValue + ": " + value);
+        }
+
+        function resetPoints() {
+            socket.emit('clear all chat message', userNameValue);
+        }
+
+        // chatMessageForm.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     if (input.value) {
+        //         socket.emit('chat message', userNameValue + ": " + input.value);
+        //         input.value = '';
+        //     }
+        // });
+
+        joinForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (username.value.length >= 2 && username.value.length <= 8) {
+                socket.emit('userName', username.value);
+                userNameValue = username.value;
+                username.value = '';
+
+                const parentDivForWelcomeMessage = document.getElementById('welcomeBanner');
+                const un = document.createElement('p');
+                un.innerHTML = "Welcome " + userNameValue + "!";
+                parentDivForWelcomeMessage.appendChild(un);
+
+                joinDiv.style.display = 'none';
+                chatDiv.style.display = 'inline';
+                buttonsGridDiv.style.display = 'inline';
+            }
+            else {
+                alert("Invalid Username, Length of username must be greater than 2 and less than 8")
+            }
+        });
+
+        socket.on('chat message', (msg, serverOffset) => {
+            if (!(msg.includes("newAverage :"))) {
+                if (msg.includes("joined")) {
+                    const item = document.createElement('li');
+                    item.classList.add("UserJoinedClass");
+                    item.textContent = msg;
+                    messagesList.appendChild(item);
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+                if (msg.includes("Points were cleared by ")) {
+                    const item = document.createElement('li');
+                    item.textContent = msg;
+                    messagesList.appendChild(item);
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+                if (msg.includes("Left")) {
+                    const item = document.createElement('li');
+                    item.textContent = msg;
+                    messagesList.appendChild(item);
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+
+                socket.auth.serverOffset = serverOffset;
+            }
+
+        });
+
+        socket.on('newAverage', (msg, serverOffset) => {
+            const item = document.getElementById('newAvg');
+            item.textContent = msg;
+            socket.auth.serverOffset = serverOffset;
+        });
+
+        socket.on('latestUsersAndPoints', (usersArray, serverOffset) => {
+            const divEl = document.getElementById('pointsTable');
+            //remove previous calues of points
+            while (divEl.hasChildNodes()) {
+                divEl.firstChild.remove();
+            }
+            //read new received array of points and map to UI
+            let array = JSON.parse(usersArray);
+            for (var i = 0; i < array.length; i++) {
+                const parentPointer = document.createElement('div');
+                let button1 = document.createElement('div');
+                button1.innerHTML = array[i].name + " : " + array[i].points;
+                button1.classList.add("Pointer")
+                parentPointer.appendChild(button1);
+
+
+                //item.innerHTML = JSON.stringify(array[i]);
+                divEl.appendChild(parentPointer);
+            }
+            socket.auth.serverOffset = serverOffset;
+        });
+
+
+    </script>
+</body>
+
+</html>
